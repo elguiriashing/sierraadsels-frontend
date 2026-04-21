@@ -109,7 +109,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
         </form>
 
         <p className="mt-6 text-xs text-stone-400 text-center">
-          Welcome back Tilly
+          Welcome back Til Til
         </p>
       </div>
     </div>
