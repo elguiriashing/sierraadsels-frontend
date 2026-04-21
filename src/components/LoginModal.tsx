@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { cn } from "@/lib/utils";
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -87,10 +86,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className={cn(
-                "w-full px-4 py-3 bg-stone-50 border rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-400 transition-all text-stone-800",
-                error ? "border-red-300" : "border-stone-200"
-              )}
+              className={`w-full px-4 py-3 bg-stone-50 border rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-400 transition-all text-stone-800 ${error ? "border-red-300" : "border-stone-200"}`}
               placeholder="Voer wachtwoord in..."
               autoFocus
             />
