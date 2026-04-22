@@ -4,20 +4,12 @@ import { useState } from "react";
 import { useCMS } from "@/context/CMSContext";
 import { useAuth } from "@/context/AuthContext";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
-
 export default function Contact() {
   const { siteContent, updateSiteContent, isEditMode } = useCMS();
   const { isAuthenticated } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [email, setEmail] = useState(siteContent.contactEmail);
   const [phone, setPhone] = useState(siteContent.contactPhone);
-  
-  // Contact form state
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
-  const [statusMessage, setStatusMessage] = useState("");
 
   const handleSave = () => {
     updateSiteContent({
@@ -162,125 +154,11 @@ export default function Contact() {
             </div>
           </div>
         )}
-        
-        {/* Contact Form */}
-        {!isEditing && <ContactForm />}
       </div>
 
       <p className="text-center text-stone-400 text-sm mt-8 font-light">
         Reactie binnen 24 uur gegarandeerd
       </p>
     </div>
-  );
-}
-
-// Contact Form Component
-function ContactForm() {
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
-  const [statusMessage, setStatusMessage] = useState("");
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitStatus("idle");
-
-    try {
-      const response = await fetch(`${API_URL}/contact`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setSubmitStatus("success");
-        setStatusMessage("Bedankt! Uw bericht is verzonden.");
-        setFormData({ name: "", email: "", message: "" });
-      } else {
-        setSubmitStatus("error");
-        setStatusMessage(data.error || "Er is een fout opgetreden.");
-      }
-    } catch (err) {
-      setSubmitStatus("error");
-      setStatusMessage("Er is een fout opgetreden bij het verzenden.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-5 mt-10 pt-10 border-t border-stone-200">
-      <h3 className="text-lg font-light tracking-wider text-stone-800 mb-6 text-center">
-        Stuur een bericht
-      </h3>
-      
-      <div>
-        <label htmlFor="name" className="block text-xs uppercase tracking-wider text-stone-500 mb-2">
-          Naam
-        </label>
-        <input
-          type="text"
-          id="name"
-          value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          required
-          className="w-full px-4 py-3 bg-white border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-400 text-stone-800"
-          placeholder="Uw naam"
-        />
-      </div>
-
-      <div>
-        <label htmlFor="email" className="block text-xs uppercase tracking-wider text-stone-500 mb-2">
-          E-mail
-        </label>
-        <input
-          type="email"
-          id="email"
-          value={formData.email}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-          required
-          className="w-full px-4 py-3 bg-white border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-400 text-stone-800"
-          placeholder="uw@email.nl"
-        />
-      </div>
-
-      <div>
-        <label htmlFor="message" className="block text-xs uppercase tracking-wider text-stone-500 mb-2">
-          Bericht
-        </label>
-        <textarea
-          id="message"
-          value={formData.message}
-          onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-          required
-          rows={5}
-          className="w-full px-4 py-3 bg-white border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-400 text-stone-800 resize-none"
-          placeholder="Uw bericht..."
-        />
-      </div>
-
-      {submitStatus !== "idle" && (
-        <div
-          className={`p-4 rounded-lg text-center text-sm ${
-            submitStatus === "success"
-              ? "bg-green-50 text-green-700 border border-green-200"
-              : "bg-red-50 text-red-700 border border-red-200"
-          }`}
-        >
-          {statusMessage}
-        </div>
-      )}
-
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="w-full py-4 bg-stone-800 text-white text-sm uppercase tracking-widest rounded-lg hover:bg-stone-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        {isSubmitting ? "Verzenden..." : "Verstuur bericht"}
-      </button>
-    </form>
   );
 }
