@@ -274,7 +274,7 @@ export default function LandingPage({ onCategoryChange }: LandingPageProps) {
             <img
               src={siteContent.makerImage}
               alt={`${siteContent.makerName} - Creator of Sierraadsels`}
-              className="w-full h-full object-cover rounded-full shadow-lg"
+              className="w-full h-full object-contain rounded-full shadow-lg bg-stone-100"
             />
           </div>
           <div className="text-center md:text-left">
@@ -328,7 +328,10 @@ export default function LandingPage({ onCategoryChange }: LandingPageProps) {
       {/* Quote Section */}
       <section className="py-16 bg-stone-50">
         <div className="max-w-2xl mx-auto px-6 text-center">
-          <blockquote className={`text-xl md:text-2xl font-light text-stone-600 italic leading-relaxed ${showEdit ? 'cursor-pointer hover:bg-white/50 rounded px-2 py-1' : ''}`}>
+          <blockquote 
+            className={`text-xl md:text-2xl font-light text-stone-600 italic leading-relaxed ${showEdit ? 'cursor-pointer hover:bg-white/50 rounded px-2 py-1' : ''}`}
+            onClick={() => showEdit && setEditingSection("quoteText")}
+          >
             "
             {showEdit ? (
               <EditableText
@@ -337,9 +340,10 @@ export default function LandingPage({ onCategoryChange }: LandingPageProps) {
                 isEditing={editingSection === "quoteText"}
                 setIsEditing={(v) => setEditingSection(v ? "quoteText" : null)}
                 inputClassName="text-xl md:text-2xl font-light italic text-center"
+                placeholder="Klik om een quote toe te voegen..."
               />
             ) : (
-              siteContent.quoteText
+              siteContent.quoteText || (showEdit && <span className="text-stone-400">Klik om een quote toe te voegen...</span>)
             )}
             "
           </blockquote>
