@@ -87,10 +87,14 @@ export function CMSProvider({ children }: { children: ReactNode }) {
         imageUrl = uploadResult.url;
       }
 
+      // Generate a unique id — backend schema requires it
+      const generatedId = `${item.category}-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+
       const newItem = await apiCreateItem({
         ...item,
+        id: generatedId,
         src: imageUrl,
-      });
+      } as JewelryItem);
       setItems((prev) => [...prev, newItem]);
     } catch (err) {
       console.error("Failed to add item:", err);

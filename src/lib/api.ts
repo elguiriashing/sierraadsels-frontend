@@ -54,7 +54,7 @@ export async function getItems(): Promise<JewelryItem[]> {
 }
 
 export async function createItem(
-  item: Omit<JewelryItem, "id">
+  item: JewelryItem
 ): Promise<JewelryItem> {
   return fetchApi("/items", {
     method: "POST",
